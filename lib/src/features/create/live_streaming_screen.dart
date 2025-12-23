@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LiveStreamingScreen extends StatefulWidget {
   const LiveStreamingScreen({super.key});
@@ -26,15 +25,15 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
     try {
       final cameras = await availableCameras();
       if (cameras.isNotEmpty) {
-        // Use front camera strictly as per "Selfie/Broadcaster" vibe usuallly, 
-        // but can default to back. Prompt image shows a user looking at camera (selfie or back). 
+        // Use front camera strictly as per "Selfie/Broadcaster" vibe usuallly,
+        // but can default to back. Prompt image shows a user looking at camera (selfie or back).
         // Let's use back first as standard, or 1 if available for front.
         // Assuming index 1 is front usually.
         final camera = cameras.length > 1 ? cameras[1] : cameras[0];
         _controller = CameraController(
-            camera, 
-            ResolutionPreset.high,
-            enableAudio: false
+          camera,
+          ResolutionPreset.high,
+          enableAudio: false,
         );
         await _controller!.initialize();
         if (mounted) {
@@ -66,7 +65,16 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
           if (_isCameraInitialized && _isCameraOn)
             CameraPreview(_controller!)
           else
-            Container(color: Colors.grey.shade900, child: const Center(child: Icon(Icons.videocam_off, color: Colors.white54, size: 64))),
+            Container(
+              color: Colors.grey.shade900,
+              child: const Center(
+                child: Icon(
+                  Icons.videocam_off,
+                  color: Colors.white54,
+                  size: 64,
+                ),
+              ),
+            ),
 
           // 2. Top Info Bar
           Positioned(
@@ -75,18 +83,35 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
             right: 0,
             child: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 child: Row(
                   children: [
                     _buildBroadcasterInfo(),
                     const Spacer(),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                      child: const Text('00:30', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, shadows: [Shadow(color: Colors.black, blurRadius: 4)])),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 4,
+                      ),
+                      child: const Text(
+                        '00:30',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          shadows: [Shadow(color: Colors.black, blurRadius: 4)],
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 8),
                     IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white, size: 28),
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 28,
+                      ),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ],
@@ -102,14 +127,30 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
             child: Column(
               children: [
                 _buildSideButton(Icons.share, 'Share', onTap: () {}),
-                _buildSideButton(_isMicOn ? Icons.mic : Icons.mic_off, 'Mic', onTap: () {
-                  setState(() => _isMicOn = !_isMicOn);
-                }),
-                _buildSideButton(_isCameraOn ? Icons.videocam : Icons.videocam_off, 'Camera', onTap: () {
-                  setState(() => _isCameraOn = !_isCameraOn);
-                }),
-                _buildSideButton(Icons.flip_camera_ios, 'Flip', onTap: () {}), // Logic would require re-init camera
-                _buildSideButton(Icons.filter_vintage, 'Filters', onTap: _showFilters),
+                _buildSideButton(
+                  _isMicOn ? Icons.mic : Icons.mic_off,
+                  'Mic',
+                  onTap: () {
+                    setState(() => _isMicOn = !_isMicOn);
+                  },
+                ),
+                _buildSideButton(
+                  _isCameraOn ? Icons.videocam : Icons.videocam_off,
+                  'Camera',
+                  onTap: () {
+                    setState(() => _isCameraOn = !_isCameraOn);
+                  },
+                ),
+                _buildSideButton(
+                  Icons.flip_camera_ios,
+                  'Flip',
+                  onTap: () {},
+                ), // Logic would require re-init camera
+                _buildSideButton(
+                  Icons.filter_vintage,
+                  'Filters',
+                  onTap: _showFilters,
+                ),
               ],
             ),
           ),
@@ -134,7 +175,10 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
             bottom: 0,
             child: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8,
+                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -146,10 +190,19 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
                         itemCount: 4,
                         itemBuilder: (context, index) {
                           final comments = [
-                            {'user': 'pink_lemonade', 'msg': 'Gonna buy this for sure!'},
-                            {'user': 'princess_tiara', 'msg': 'Ohhh yess! This outfit looks awesome!!!'},
+                            {
+                              'user': 'pink_lemonade',
+                              'msg': 'Gonna buy this for sure!',
+                            },
+                            {
+                              'user': 'princess_tiara',
+                              'msg': 'Ohhh yess! This outfit looks awesome!!!',
+                            },
                             {'user': 'jennyfar', 'msg': 'Love your outfit!'},
-                            {'user': 'anabelly_ju', 'msg': 'joined the livestream'},
+                            {
+                              'user': 'anabelly_ju',
+                              'msg': 'joined the livestream',
+                            },
                           ];
                           final c = comments[index];
                           return Padding(
@@ -157,13 +210,18 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
                             child: Row(
                               children: [
                                 CircleAvatar(
-                                  radius: 12, 
-                                  backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=${index+30}'),
+                                  radius: 12,
+                                  backgroundImage: NetworkImage(
+                                    'https://i.pravatar.cc/150?img=${index + 30}',
+                                  ),
                                 ),
                                 const SizedBox(width: 8),
                                 Flexible(
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 6,
+                                    ),
                                     decoration: BoxDecoration(
                                       color: Colors.black.withOpacity(0.3),
                                       borderRadius: BorderRadius.circular(12),
@@ -171,11 +229,18 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
                                     child: RichText(
                                       text: TextSpan(
                                         text: '${c['user']}\n',
-                                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.white70),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: Colors.white70,
+                                        ),
                                         children: [
                                           TextSpan(
                                             text: c['msg'],
-                                            style: const TextStyle(fontWeight: FontWeight.normal, color: Colors.white),
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -189,7 +254,7 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    
+
                     // Product Highlight Box
                     ClipRRect(
                       borderRadius: BorderRadius.circular(12),
@@ -198,7 +263,9 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
                         child: Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.9), // Slightly opaque white for contrast
+                            color: Colors.white.withOpacity(
+                              0.9,
+                            ), // Slightly opaque white for contrast
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Row(
@@ -210,7 +277,9 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
                                   color: Colors.grey.shade200,
                                   borderRadius: BorderRadius.circular(8),
                                   image: const DecorationImage(
-                                    image: NetworkImage('https://picsum.photos/200'),
+                                    image: NetworkImage(
+                                      'https://picsum.photos/200',
+                                    ),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -220,10 +289,30 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text('Special Glasses', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 14)),
-                                    Text('45 left', style: TextStyle(color: Colors.grey.shade700, fontSize: 12)),
+                                    const Text(
+                                      'Special Glasses',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    Text(
+                                      '45 left',
+                                      style: TextStyle(
+                                        color: Colors.grey.shade700,
+                                        fontSize: 12,
+                                      ),
+                                    ),
                                     const SizedBox(height: 2),
-                                    const Text('\$10.00', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 14)),
+                                    const Text(
+                                      '\$10.00',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -234,22 +323,37 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
                                     onPressed: () {},
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: const Color(0xFFEA4359),
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 0,
+                                      ),
                                       minimumSize: const Size(0, 36),
                                     ),
-                                    child: const Text('Buy now', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                    child: const Text(
+                                      'Buy now',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                   Positioned(
                                     right: -8,
                                     top: -8,
                                     child: IconButton(
-                                      icon: const Icon(Icons.close, size: 16, color: Colors.grey),
+                                      icon: const Icon(
+                                        Icons.close,
+                                        size: 16,
+                                        color: Colors.grey,
+                                      ),
                                       padding: EdgeInsets.zero,
                                       constraints: const BoxConstraints(),
                                       onPressed: () {}, // Close product box
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ],
@@ -268,9 +372,18 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
                         fillColor: Colors.black.withOpacity(0.4),
                         hintText: 'Write a comment...',
                         hintStyle: const TextStyle(color: Colors.white70),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(24), borderSide: BorderSide.none),
-                        suffixIcon: const Icon(Icons.home_outlined, color: Colors.white), // Home icon as placeholder for keyboard actions/emoji
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 0,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(24),
+                          borderSide: BorderSide.none,
+                        ),
+                        suffixIcon: const Icon(
+                          Icons.home_outlined,
+                          color: Colors.white,
+                        ), // Home icon as placeholder for keyboard actions/emoji
                       ),
                     ),
                   ],
@@ -297,12 +410,24 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
             children: [
               const CircleAvatar(
                 radius: 16,
-                backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=9'),
+                backgroundImage: NetworkImage(
+                  'https://i.pravatar.cc/150?img=9',
+                ),
               ),
               Container(
-                 padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
-                 decoration: BoxDecoration(color: const Color(0xFFEA4359), borderRadius: BorderRadius.circular(2)),
-                 child: const Text('LIVE', style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold)),
+                padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEA4359),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+                child: const Text(
+                  'LIVE',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 8,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ],
           ),
@@ -310,8 +435,18 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
-              Text('isahan...', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
-              Text('521 views', style: TextStyle(color: Colors.white70, fontSize: 10)),
+              Text(
+                'isahan...',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                ),
+              ),
+              Text(
+                '521 views',
+                style: TextStyle(color: Colors.white70, fontSize: 10),
+              ),
             ],
           ),
           const SizedBox(width: 8),
@@ -320,16 +455,33 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
     );
   }
 
-  Widget _buildSideButton(IconData icon, String label, {required VoidCallback onTap}) {
+  Widget _buildSideButton(
+    IconData icon,
+    String label, {
+    required VoidCallback onTap,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: GestureDetector(
         onTap: onTap,
         child: Column(
           children: [
-            Icon(icon, color: Colors.white, size: 26, shadows: const [Shadow(color: Colors.black26, blurRadius: 4)]),
+            Icon(
+              icon,
+              color: Colors.white,
+              size: 26,
+              shadows: const [Shadow(color: Colors.black26, blurRadius: 4)],
+            ),
             const SizedBox(height: 4),
-            Text(label, style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w600, shadows: [Shadow(color: Colors.black26, blurRadius: 4)])),
+            Text(
+              label,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+                shadows: [Shadow(color: Colors.black26, blurRadius: 4)],
+              ),
+            ),
           ],
         ),
       ),
@@ -341,7 +493,12 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         children: [
-          Icon(icon, color: Colors.white, size: 26, shadows: const [Shadow(color: Colors.black26, blurRadius: 4)]),
+          Icon(
+            icon,
+            color: Colors.white,
+            size: 26,
+            shadows: const [Shadow(color: Colors.black26, blurRadius: 4)],
+          ),
         ],
       ),
     );
@@ -361,10 +518,15 @@ class _LiveStreamingScreenState extends State<LiveStreamingScreen> {
           padding: const EdgeInsets.all(16),
           itemBuilder: (context, index) {
             return Container(
-              width: 80, 
+              width: 80,
               margin: const EdgeInsets.only(right: 12),
               color: Colors.grey,
-              child: Center(child: Text('Filter $index', style: const TextStyle(color: Colors.white))),
+              child: Center(
+                child: Text(
+                  'Filter $index',
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
             );
           },
         ),

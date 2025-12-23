@@ -1,8 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'template_screen.dart';
-import 'live_streaming_screen.dart';
 import 'live_streaming_screen.dart';
 
 class CameraScreen extends StatefulWidget {

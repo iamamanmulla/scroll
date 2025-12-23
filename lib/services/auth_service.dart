@@ -49,29 +49,22 @@ class AuthService {
   }
 
   // 2. Google Sign-In
-  // Optional serverClientId may be passed on Android to satisfy OAuth requirements.
-  Future<User?> signInWithGoogle({String? serverClientId}) async {
+  Future<User?> signInWithGoogle() async {
     try {
-      final googleSignIn = GoogleSignIn(
-        scopes: ['email'],
-        serverClientId: serverClientId,
-      );
+      // Use the singleton instance and call the interactive `authenticate` flow
+      final GoogleSignInAccount googleUser = await GoogleSignIn.instance
+          .authenticate();
 
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-      if (googleUser == null) return null; // user cancelled
+      // `authentication` is available synchronously on the account object
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      if ((googleAuth.idToken == null || googleAuth.idToken!.isEmpty) &&
-          (googleAuth.accessToken == null || googleAuth.accessToken!.isEmpty)) {
+      if (googleAuth.idToken == null || googleAuth.idToken!.isEmpty) {
         // ignore: avoid_print
-        print('Google Sign-In: tokens missing. idToken:${googleAuth.idToken} accessToken:${googleAuth.accessToken}');
+        print('Google Sign-In: idToken missing');
         return null;
       }
 
       final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
@@ -88,6 +81,7 @@ class AuthService {
     }
   }
 
+  // Friendly FirebaseAuthException mapping used by UI/tests
   // Friendly FirebaseAuthException mapping used by UI/tests
   static String friendlyErrorMessage(FirebaseAuthException e) {
     switch (e.code) {

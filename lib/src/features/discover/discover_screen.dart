@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'discover_search_screen.dart';
 
 class DiscoverScreen extends StatelessWidget {
   const DiscoverScreen({super.key});
@@ -8,46 +8,65 @@ class DiscoverScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Match screenshot light theme or use dark if requested (Image was light)
-      // The image shows a light theme search page even if app is dark mode usually? 
+      backgroundColor: Colors
+          .white, // Match screenshot light theme or use dark if requested (Image was light)
+      // The image shows a light theme search page even if app is dark mode usually?
       // User prompt says "This is my figma design... help me design", screenshot shows light BG.
       // We will stick to the AppTheme which is currently Dark.
-      // ADJUSTMENT: The prompt screenshot is LIGHT mode. 
+      // ADJUSTMENT: The prompt screenshot is LIGHT mode.
       // If the app is strictly dark, we should adapt the design to dark or use a white container.
-      // Based on previous "Dark Theme" requirement, I will adapt this to Dark Theme 
+      // Based on previous "Dark Theme" requirement, I will adapt this to Dark Theme
       // but keep the layout exactly as requested.
-      
       body: SafeArea(
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
-            // 1. Search Bar
+            // 1. Search Bar (tap to open full search)
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search',
-                    prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                    suffixIcon: const Icon(Icons.center_focus_weak, color: Colors.black), // Scan iconish
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
+                child: GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const DiscoverSearchScreen(),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 0),
                   ),
-                  style: const TextStyle(color: Colors.black),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: const [
+                        Icon(Icons.search, color: Colors.grey),
+                        SizedBox(width: 12),
+                        Text(
+                          'Search users',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
 
             // 2. Initial Chips (Happy, Romantic...)
             SliverToBoxAdapter(
-              child: _buildHorizontalList(
-                ['Happy', 'Romantic', 'Chill', 'Funny', 'Party', 'Vibes', 'Music'],
-              ),
+              child: _buildHorizontalList([
+                'Happy',
+                'Romantic',
+                'Chill',
+                'Funny',
+                'Party',
+                'Vibes',
+                'Music',
+              ]),
             ),
 
             // 3. Genre Section
@@ -57,16 +76,21 @@ class DiscoverScreen extends StatelessWidget {
                 child: Text(
                   'Genre',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black, // Adapting for Light mode based on screenshot, or assume overrides
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: Colors
+                        .black, // Adapting for Light mode based on screenshot, or assume overrides
+                  ),
                 ),
               ),
             ),
             SliverToBoxAdapter(
-              child: _buildHorizontalList(
-                ['Happy', 'Romantic', 'Chill', 'Funny', 'Party'],
-              ),
+              child: _buildHorizontalList([
+                'Happy',
+                'Romantic',
+                'Chill',
+                'Funny',
+                'Party',
+              ]),
             ),
 
             // 4. Trending Hashtag Section
@@ -76,16 +100,20 @@ class DiscoverScreen extends StatelessWidget {
                 child: Text(
                   'Trending Hashtag',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ),
             SliverToBoxAdapter(
-              child: _buildHorizontalList(
-                ['Happy', 'Romantic', 'Chill', 'Funny', 'Party'],
-              ),
+              child: _buildHorizontalList([
+                'Happy',
+                'Romantic',
+                'Chill',
+                'Funny',
+                'Party',
+              ]),
             ),
 
             const SliverToBoxAdapter(child: SizedBox(height: 16)),
@@ -103,7 +131,9 @@ class DiscoverScreen extends StatelessWidget {
                 },
               ),
             ),
-             const SliverToBoxAdapter(child: SizedBox(height: 80)), // Bottom nav spacer
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 80),
+            ), // Bottom nav spacer
           ],
         ),
       ),
@@ -128,7 +158,10 @@ class DiscoverScreen extends StatelessWidget {
             ),
             child: Text(
               items[index],
-              style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black),
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+              ),
             ),
           );
         },
@@ -138,8 +171,8 @@ class DiscoverScreen extends StatelessWidget {
 
   Widget _buildGridItem(int index) {
     // Random height generation simulation
-    final double ht = (index % 5 + 2) * 60.0; 
-    
+    final double ht = (index % 5 + 2) * 60.0;
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: Stack(
@@ -152,7 +185,7 @@ class DiscoverScreen extends StatelessWidget {
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,
-               errorBuilder: (c, o, s) => const Center(child: Icon(Icons.image)),
+              errorBuilder: (c, o, s) => const Center(child: Icon(Icons.image)),
             ),
           ),
           if (index % 3 == 0)

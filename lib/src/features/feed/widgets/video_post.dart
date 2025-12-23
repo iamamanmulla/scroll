@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:visibility_detector/visibility_detector.dart';
-import '../../../shared/widgets/main_nav.dart'; // Ensure correct import if needed
 import 'video_overlay.dart';
 
 class VideoPost extends StatefulWidget {
@@ -32,17 +30,19 @@ class _VideoPostState extends State<VideoPost> {
 
   void _initializeController() {
     _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
-      ..initialize().then((_) {
-        setState(() {
-          _isInitialized = true;
-        });
-        if (widget.index == widget.focusedIndex) {
-          _controller.play();
-          _controller.setLooping(true);
-        }
-      }).catchError((error) {
-         debugPrint('Video initialization error: $error');
-      });
+      ..initialize()
+          .then((_) {
+            setState(() {
+              _isInitialized = true;
+            });
+            if (widget.index == widget.focusedIndex) {
+              _controller.play();
+              _controller.setLooping(true);
+            }
+          })
+          .catchError((error) {
+            debugPrint('Video initialization error: $error');
+          });
   }
 
   @override
@@ -51,7 +51,8 @@ class _VideoPostState extends State<VideoPost> {
     if (widget.index == widget.focusedIndex && !_controller.value.isPlaying) {
       _controller.play();
       _controller.setLooping(true);
-    } else if (widget.index != widget.focusedIndex && _controller.value.isPlaying) {
+    } else if (widget.index != widget.focusedIndex &&
+        _controller.value.isPlaying) {
       _controller.pause();
     }
   }
@@ -85,7 +86,7 @@ class _VideoPostState extends State<VideoPost> {
                 : const CircularProgressIndicator(color: Colors.white),
           ),
         ),
-        
+
         // Interaction Overlay Layer
         VideoOverlay(index: widget.index),
       ],
