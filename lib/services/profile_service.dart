@@ -40,7 +40,7 @@ class ProfileService {
   // Check if a username is already taken
   Future<bool> isUsernameTaken(String username, String currentUid) async {
     final QuerySnapshot result = await _usersCollection
-        .where('username', isEqualTo: username)
+        .where('username_lower', isEqualTo: username.toLowerCase())
         .get();
 
     // If any document is found, check if it belongs to a different user

@@ -17,6 +17,12 @@ class UserService {
   }
 
   Future<void> updateUser(String uid, Map<String, dynamic> data) async {
+    if (data.containsKey('username')) {
+      data['username_lower'] = (data['username'] as String).toLowerCase();
+    }
+    if (data.containsKey('displayName')) {
+      data['displayName_lower'] = (data['displayName'] as String).toLowerCase();
+    }
     await _db.collection('users').doc(uid).set(data, SetOptions(merge: true));
   }
 

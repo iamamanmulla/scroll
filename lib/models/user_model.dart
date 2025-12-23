@@ -17,6 +17,7 @@ class UserModel {
   String? instagramLink;
   String? youtubeLink;
   String? facebookLink;
+  String? displayNameLower;
 
   /// Counts for social graph. Keep these as ints for easy sorting/reads.
   int followerCount;
@@ -33,6 +34,7 @@ class UserModel {
     this.instagramLink,
     this.youtubeLink,
     this.facebookLink,
+    this.displayNameLower,
     this.followerCount = 0,
     this.followingCount = 0,
   });
@@ -50,6 +52,7 @@ class UserModel {
       instagramLink: map['instagramLink'],
       youtubeLink: map['youtubeLink'],
       facebookLink: map['facebookLink'],
+      displayNameLower: map['displayName_lower'],
       followerCount: (map['followerCount'] is int)
           ? map['followerCount'] as int
           : (map['followerCount'] is num
@@ -77,6 +80,8 @@ class UserModel {
       'facebookLink': facebookLink,
       'followerCount': followerCount,
       'followingCount': followingCount,
+      'displayName_lower': displayNameLower,
+      if (username != null) 'username_lower': username!.toLowerCase(),
     };
   }
 }

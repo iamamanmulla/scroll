@@ -4,25 +4,42 @@ import '../models/user_model.dart';
 class SearchService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  /// Search users by username prefix using a range query.
-  /// This uses the typical Firestore prefix trick with `\uf8ff`.
-  Future<List<UserModel>> searchUsersByUsernamePrefix(
-    String prefix, {
+  Future<List<UserModel>> searchUsers({
+    required String query,
     int limit = 20,
   }) async {
-    prefix = prefix.trim().toLowerCase();
-    if (prefix.isEmpty) return [];
+    final q = query.trim().toLowerCase();
+    if (q.isEmpty) return [];
 
-    final q = _db
+    // 1️⃣ Search by username
+    final usernameSnap = await _db
         .collection('users')
-        .where('username', isGreaterThanOrEqualTo: prefix)
-        .where('username', isLessThanOrEqualTo: '$prefix\uf8ff')
-        .orderBy('username')
-        .limit(limit);
+        .where('username_lower', isGreaterThanOrEqualTo: q)
+        .where('username_lower', isLessThanOrEqualTo: '$q\uf8ff')
+        .orderBy('username_lower')
+        .limit(limit)
+        .get();
 
-    final snap = await q.get();
-    return snap.docs
-        .map((d) => UserModel.fromMap(d.data(), d.id))
-        .toList();
+    // 2️⃣ Search by display name
+    final nameSnap = await _db
+        .collection('users')
+        .where('displayName_lower', isGreaterThanOrEqualTo: q)
+        .where('displayName_lower', isLessThanOrEqualTo: '$q\uf8ff')
+        .orderBy('displayName_lower')
+        .limit(limit)
+        .get();
+
+    // 3️⃣ Merge & remove duplicates
+    final Map<String, UserModel> users = {};
+
+    for (var d in usernameSnap.docs) {
+      users[d.id] = UserModel.fromMap(d.data(), d.id);
+    }
+
+    for (var d in nameSnap.docs) {
+      users[d.id] = UserModel.fromMap(d.data(), d.id);
+    }
+
+    return users.values.toList();
   }
 }

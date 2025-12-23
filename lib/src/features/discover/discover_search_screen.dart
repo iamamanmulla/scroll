@@ -28,7 +28,7 @@ class _DiscoverSearchScreenState extends State<DiscoverSearchScreen> {
         if (q.isEmpty) {
           _resultsFuture = null;
         } else {
-          _resultsFuture = _searchService.searchUsersByUsernamePrefix(q);
+          _resultsFuture = _searchService.searchUsers(query: q);
         }
       });
     });
